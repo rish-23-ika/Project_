@@ -1,3 +1,4 @@
+import 'screens/login_screen.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -153,8 +154,8 @@ class InstitutionSelectionScreen extends StatelessWidget {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (_) => InstitutionDashboardScreen(
-                          institution: institution,
+                        builder: (_) => LoginScreen(
+                          institutionName: institution.name,
                         ),
                       ),
                     );
