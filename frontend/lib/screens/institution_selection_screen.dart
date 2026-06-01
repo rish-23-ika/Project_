@@ -1,41 +1,55 @@
 import 'package:flutter/material.dart';
 
 import '../models/institution.dart';
+import '../services/institution_service.dart';
 import 'login_screen.dart';
 
-class InstitutionSelectionScreen extends StatelessWidget {
+class InstitutionSelectionScreen extends StatefulWidget {
   const InstitutionSelectionScreen({super.key});
 
-  static final List<Institution> institutions = [
-    Institution(
-      id: "1",
-      name: "Bennett University",
-      domain: "bennett.traceit.in",
-    ),
-    Institution(
-      id: "2",
-      name: "Amity University",
-      domain: "amity.traceit.in",
-    ),
-    Institution(
-      id: "3",
-      name: "Lovely Professional University",
-      domain: "lpu.traceit.in",
-    ),
-    Institution(
-      id: "4",
-      name: "SRM University",
-      domain: "srm.traceit.in",
-    ),
-    Institution(
-      id: "5",
-      name: "Galgotias University",
-      domain: "galgotias.traceit.in",
-    ),
-  ];
+  @override
+  State<InstitutionSelectionScreen> createState() =>
+      _InstitutionSelectionScreenState();
+}
+
+class _InstitutionSelectionScreenState
+    extends State<InstitutionSelectionScreen> {
+  List<Institution> institutions = [];
+  bool isLoading = true;
+
+  @override
+  void initState() {
+    super.initState();
+    loadInstitutions();
+  }
+
+  Future<void> loadInstitutions() async {
+    try {
+      final data = await InstitutionService.getInstitutions();
+
+      setState(() {
+        institutions = data;
+        isLoading = false;
+      });
+    } catch (e) {
+      debugPrint("Error loading institutions: $e");
+
+      setState(() {
+        isLoading = false;
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
+    if (isLoading) {
+      return const Scaffold(
+        body: Center(
+          child: CircularProgressIndicator(),
+        ),
+      );
+    }
+
     return Scaffold(
       backgroundColor: const Color(0xfff5f7fa),
       body: Center(
@@ -111,7 +125,7 @@ class InstitutionSelectionScreen extends StatelessWidget {
                       option.name,
                   optionsBuilder: (TextEditingValue textEditingValue) {
                     if (textEditingValue.text.isEmpty) {
-                      return const Iterable<Institution>.empty();
+                      return institutions;
                     }
 
                     return institutions.where(
