@@ -17,7 +17,7 @@ TraceIt is a multi-tenant lost property management system designed for instituti
 - Admin dashboard
 - Multi-campus scalability
 
-## Tech Stack
+## Tech Stack////////
 
 ### Frontend
 - Flutter
